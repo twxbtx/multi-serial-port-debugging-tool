@@ -1,0 +1,108 @@
+{
+  "name": "serial-assistant",
+  "private": true,
+  "version": "2.1.0",
+  "description": "Multi-session serial debugging assistant desktop app",
+  "productName": "SerialAssistant",
+  "author": "senasic",
+  "main": "electron/main.mjs",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:web\" \"npm:dev:electron\"",
+    "dev:web": "vite",
+    "dev:electron": "wait-on http://127.0.0.1:5173/renderer.html && electron .",
+    "electron": "electron .",
+    "build": "tsc -b && vite build && node scripts/inline-renderer.mjs",
+    "package:portable": "npm run build && electron-builder --win portable --config.win.signAndEditExecutable=false",
+    "package:dir": "npm run build && electron-builder --win dir --config.win.signAndEditExecutable=false",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "clean": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/clean-workspace.ps1"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^10.0.0",
+    "electron": "^42.3.0",
+    "electron-builder": "^26.8.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2",
+    "vite": "^8.0.12",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "com.senasic.serialassistant",
+    "productName": "SerialAssistant",
+    "asar": true,
+    "compression": "maximum",
+    "npmRebuild": false,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false,
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "directories": {
+      "output": "${env.SERIAL_ASSISTANT_OUTPUT}"
+    },
+    "files": [
+      "renderer-dist/**/*",
+      "electron/**/*",
+      "icon.ico",
+      "package.json",
+      "!**/*.map",
+      "!**/*.md",
+      "!**/README*",
+      "!**/readme*",
+      "!**/CHANGELOG*",
+      "!**/test{,s}/**",
+      "!**/__tests__/**",
+      "!**/example{,s}/**",
+      "!**/docs/**",
+      "!**/doc/**",
+      "!**/documents/**",
+      "!**/.github/**",
+      "!**/.travis.yml",
+      "!node_modules/@serialport/bindings-cpp/prebuilds/android-*",
+      "!node_modules/@serialport/bindings-cpp/prebuilds/darwin-*",
+      "!node_modules/@serialport/bindings-cpp/prebuilds/linux-*",
+      "!node_modules/@serialport/bindings-cpp/prebuilds/win32-arm64",
+      "!node_modules/@serialport/bindings-cpp/prebuilds/win32-ia32",
+      "!node_modules/@serialport/bindings-cpp/src/**"
+    ],
+    "extraResources": [
+      {
+        "from": "icon.ico",
+        "to": "icons/icon.ico"
+      }
+    ],
+    "extraMetadata": {
+      "main": "electron/main.mjs"
+    },
+    "win": {
+      "icon": "${env.SERIAL_ASSISTANT_ICON}",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
+  }
+}
