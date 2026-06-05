@@ -3089,8 +3089,14 @@ textarea {
   min-height: 0;
   min-block-size: 0;
   align-self: stretch;
-  align-content: stretch;
-  overflow: hidden !important;
+  align-content: start;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-gutter: stable;
+}
+
+.pane-grid.simple-grid {
+  --pane-min-height: 320px;
 }
 
 .pane-grid.simple-grid.layout-horizontal,
@@ -3098,7 +3104,7 @@ textarea {
 .pane-grid.simple-grid.count-2.layout-horizontal,
 .pane-grid.simple-grid.count-2.layout-auto,
 .pane-grid.simple-grid.count-3.layout-auto {
-  grid-auto-rows: minmax(0, 1fr) !important;
+  grid-auto-rows: minmax(min(var(--pane-min-height), 100%), 1fr) !important;
 }
 
 .pane-grid.simple-grid > .session-pane {

@@ -222,7 +222,7 @@ export default function App() {
     [sessions],
   );
 
-  const workbenchSessions = useMemo(() => sessions.slice(0, 4), [sessions]);
+  const workbenchSessions = sessions;
 
   const updateSession = useCallback((sessionId: string, updater: (session: SessionState) => SessionState) => {
     setSessions((current) => current.map((session) => (session.id === sessionId ? updater(session) : session)));
