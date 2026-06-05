@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Codex compatibility guidance adapted from the public `forrestchang/andrej-karpathy-skills` project, merged with the SN SDK project rules.
+Codex compatibility guidance adapted from the public `forrestchang/andrej-karpathy-skills` project.
 
 ## Project Skill Defaults
 
