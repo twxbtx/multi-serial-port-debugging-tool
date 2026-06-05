@@ -1,6 +1,6 @@
 # Serial Assistant
 
-基于 `Electron + React + TypeScript` 的多串口调试助手桌面应用原型。
+基于 `Electron + React + TypeScript` 的多串口调试助手桌面应用原型，使用Codex开发，核心功能：一个视窗多个串口窗口+录制测试动作回放做周期性自动化测试。
 
 ## 一键打包免安装 EXE
 
