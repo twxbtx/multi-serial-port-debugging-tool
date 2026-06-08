@@ -11,8 +11,8 @@ import type {
 } from "./types";
 
 const RX_FLUSH_INTERVAL_MS = 100;
-const RX_DISPLAY_BYTE_LIMIT = 1536;
-const RX_RAW_HEX_BYTE_LIMIT = 384;
+const RX_DISPLAY_BYTE_LIMIT = 64 * 1024;
+const RX_RAW_HEX_BYTE_LIMIT = 8 * 1024;
 const LOG_CACHE_WARN_BYTES = 90 * 1024 ** 3;
 const LOG_CACHE_LIMIT_BYTES = 100 * 1024 ** 3;
 

@@ -9,9 +9,9 @@ export const ACTION_TAPE_KEY = "serial-assistant.v2.action-tape";
 
 export const MAX_LOGS = 520;
 export const MAX_RENDERED_LOGS = 120;
-export const MAX_LOG_MESSAGE_CHARS = 1400;
-export const MAX_LOG_RAW_HEX_CHARS = 900;
-export const MAX_LOG_CHAR_BUDGET = 180_000;
+export const MAX_LOG_MESSAGE_CHARS = 220_000;
+export const MAX_LOG_RAW_HEX_CHARS = 220_000;
+export const MAX_LOG_CHAR_BUDGET = 1_500_000;
 export const MIN_LOG_FONT_SIZE = 8;
 export const MAX_LOG_FONT_SIZE = 18;
 export const SERIAL_EVENT_FLUSH_MS = 100;
