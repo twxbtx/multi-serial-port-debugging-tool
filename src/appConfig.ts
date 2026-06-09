@@ -7,15 +7,12 @@ export const SIDEBAR_KEY = "serial-assistant.v2.left-sidebar";
 export const INSPECTOR_KEY = "serial-assistant.v2.right-inspector";
 export const ACTION_TAPE_KEY = "serial-assistant.v2.action-tape";
 
-export const MAX_LOGS = 520;
-export const MAX_RENDERED_LOGS = 120;
 export const MAX_LOG_MESSAGE_CHARS = 220_000;
 export const MAX_LOG_RAW_HEX_CHARS = 220_000;
-export const MAX_LOG_CHAR_BUDGET = 1_500_000;
 export const MIN_LOG_FONT_SIZE = 8;
 export const MAX_LOG_FONT_SIZE = 18;
-export const SERIAL_EVENT_FLUSH_MS = 100;
-export const SERIAL_EVENT_BATCH_LIMIT = 120;
+export const SERIAL_EVENT_FLUSH_MS = 250;
+export const SERIAL_EVENT_BATCH_LIMIT = 500;
 export const BAUD_RATES = [9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600, 1000000, 1500000, 2000000, 3000000, 4000000, 6000000, 7000000];
 export const MAX_BAUD_RATE = 10_000_000;
 

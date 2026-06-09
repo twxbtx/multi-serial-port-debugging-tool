@@ -1,4 +1,4 @@
-import { type CSSProperties, type DragEvent, type WheelEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type DragEvent, type WheelEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   CheckSquare,
@@ -27,6 +27,7 @@ import {
   Eraser,
 } from "lucide-react";
 import "./App.css";
+import { LogViewport } from "./LogViewport";
 import type {
   ActionStep,
   ConnectionConfig,
@@ -41,7 +42,6 @@ import {
   INSPECTOR_KEY,
   MAX_BAUD_RATE,
   MAX_LOG_FONT_SIZE,
-  MAX_RENDERED_LOGS,
   MIN_LOG_FONT_SIZE,
   PANE_LAYOUT_KEY,
   SERIAL_EVENT_BATCH_LIMIT,
@@ -69,9 +69,6 @@ import {
   formatBytes,
   formatLogExport,
   formatScriptXml,
-  formatTime,
-  getDisplayMessage,
-  renderColorizedText,
   textToHex,
   trimLogEntries,
 } from "./logFormatting";
@@ -355,12 +352,12 @@ export default function App() {
 
   const getVisibleLogs = (session: SessionState) => {
     const tokens = session.filterText.split(/[,\s]+/).map((item) => item.trim().toLowerCase()).filter(Boolean);
-    if (!tokens.length) return session.logs.slice(-MAX_RENDERED_LOGS);
+    if (!tokens.length) return { logs: session.logs, indexOffset: 0 };
     const matched = session.logs.filter((entry) => {
       const haystack = `${entry.message} ${entry.rawHex ?? ""}`.toLowerCase();
       return tokens.some((token) => haystack.includes(token));
     });
-    return (session.showFilteredOnly ? matched : session.logs).slice(-MAX_RENDERED_LOGS);
+    return { logs: session.showFilteredOnly ? matched : session.logs, indexOffset: 0 };
   };
 
   const focusSession = (sessionId: string) => {
@@ -685,7 +682,8 @@ export default function App() {
   };
 
   const renderSessionPane = (session: SessionState) => {
-    const logs = getVisibleLogs(session);
+    const visible = getVisibleLogs(session);
+    const logs = visible.logs;
     const isActive = session.id === activeSessionId;
     const totalBytes = session.logs.reduce((sum, entry) => sum + estimateByteCount(entry), 0);
     const hiddenCount = Math.max(0, session.logs.length - logs.length);
@@ -769,36 +767,16 @@ export default function App() {
             <input type="checkbox" checked={session.autoScroll} onChange={(event) => updateSession(session.id, (current) => ({ ...current, autoScroll: event.target.checked }))} />
             跟随最新
           </label>
-          <span className="log-stats">{session.logs.length} 条 / {formatBytes(totalBytes)}{hiddenCount ? ` / 隐藏 ${hiddenCount}` : ""}</span>
+          <span className="log-stats">屏幕保留 {session.logs.length} 条 / {formatBytes(totalBytes)}{hiddenCount ? ` / 过滤隐藏 ${hiddenCount}` : ""}</span>
         </div>
 
-        <div
-          className={`pane-log ${session.showLineWrap ? "wrap" : "nowrap"}`}
-          ref={(node) => { logViewportRefs.current[session.id] = node; }}
-          style={{ "--log-font-size": `${session.logFontSize}px` } as CSSProperties}
+        <LogViewport
+          session={session}
+          logs={logs}
+          indexOffset={visible.indexOffset}
+          viewportRef={(node) => { logViewportRefs.current[session.id] = node; }}
           onWheel={(event) => zoomLogFont(session.id, event)}
-          title="Ctrl + 滚轮缩放日志字体"
-        >
-          {logs.length ? (
-            logs.map((entry, index) => (
-              <div key={entry.id} className={`log-line ${entry.kind} ${entry.accent ?? "neutral"} ${session.showTimestamp ? "" : "no-time"}`}>
-                {session.showTimestamp ? <span className="log-time">{formatTime(entry.timestamp)}</span> : null}
-                <span className="log-kind">{entry.kind.toUpperCase()}</span>
-                <span className="log-message">
-                  {session.showPacketInfo ? (
-                    <span className="packet-badge">
-                      #{hiddenCount + index + 1} {estimateByteCount(entry)}B{entry.omittedBytes ? ` +${entry.omittedBytes}` : ""}
-                    </span>
-                  ) : null}
-                  {renderColorizedText(getDisplayMessage(session, entry))}
-                </span>
-              </div>
-            ))
-          ) : (
-            <div className="empty-inline">暂无日志。连接串口后开始接收。</div>
-          )}
-        </div>
-
+        />
         <div className="pane-config-row">
           <input className="pane-name-input" value={session.title} title="窗口名称" onChange={(event) => updateSession(session.id, (current) => ({ ...current, title: event.target.value }))} />
           <div className="port-combo">

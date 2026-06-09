@@ -13,9 +13,9 @@ app.commandLine.appendSwitch("disable-background-networking");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const RX_FLUSH_INTERVAL_MS = 100;
-const RX_DISPLAY_BYTE_LIMIT = 64 * 1024;
-const RX_RAW_HEX_BYTE_LIMIT = 8 * 1024;
+const RX_FLUSH_INTERVAL_MS = 250;
+const RX_DISPLAY_BYTE_LIMIT = 16 * 1024;
+const RX_RAW_HEX_BYTE_LIMIT = 4 * 1024;
 const LOG_CACHE_WARN_BYTES = 90 * 1024 ** 3;
 const LOG_CACHE_LIMIT_BYTES = 100 * 1024 ** 3;
 const PERSISTED_STATE_FILE = "serial-assistant-state.json";

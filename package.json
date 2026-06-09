@@ -47,7 +47,8 @@
     "appId": "com.senasic.serialassistant",
     "productName": "SerialAssistant",
     "asar": true,
-    "compression": "maximum",
+    "compression": "store",
+    "electronDist": "node_modules/electron/dist",
     "npmRebuild": false,
     "nodeGypRebuild": false,
     "buildDependenciesFromSource": false,
@@ -94,6 +95,9 @@
     },
     "win": {
       "icon": "${env.SERIAL_ASSISTANT_ICON}",
+      "signExts": [
+        "!exe"
+      ],
       "target": [
         {
           "target": "portable",

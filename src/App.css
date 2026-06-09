@@ -643,6 +643,17 @@
   contain: strict;
 }
 
+.pane-log.virtualized {
+  display: block;
+  gap: 0;
+}
+
+.log-virtual-spacer {
+  flex: none;
+  width: 1px;
+  pointer-events: none;
+}
+
 .pane-log.compact {
   min-height: 0;
 }
@@ -655,6 +666,7 @@
   font-size: 10.5px;
   line-height: 1.22;
   font-family: var(--font-mono);
+  min-height: var(--log-row-height, 18px);
 }
 
 .log-line.no-time {

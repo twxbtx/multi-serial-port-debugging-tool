@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 import {
-  MAX_LOG_CHAR_BUDGET,
   MAX_LOG_MESSAGE_CHARS,
   MAX_LOG_RAW_HEX_CHARS,
-  MAX_LOGS,
 } from "./appConfig";
+import { trimLogWindow } from "./logWindow";
 import type { ActionStep, LogEntry, SessionState } from "./types";
 
 export function detectAccent(message: string, kind: LogEntry["kind"]): LogEntry["accent"] {
@@ -124,13 +123,7 @@ export function compactLogEntry(entry: LogEntry): LogEntry {
 }
 
 export function trimLogEntries(entries: LogEntry[]) {
-  const next = entries.slice(-MAX_LOGS);
-  let charBudget = next.reduce((total, entry) => total + entry.message.length + (entry.rawHex?.length ?? 0), 0);
-  while (next.length > 20 && charBudget > MAX_LOG_CHAR_BUDGET) {
-    const removed = next.shift();
-    charBudget -= (removed?.message.length ?? 0) + (removed?.rawHex?.length ?? 0);
-  }
-  return next;
+  return trimLogWindow(entries);
 }
 
 export function getDisplayMessage(session: SessionState, entry: LogEntry) {
