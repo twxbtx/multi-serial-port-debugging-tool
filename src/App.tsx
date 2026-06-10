@@ -73,6 +73,7 @@ import {
   trimLogEntries,
 } from "./logFormatting";
 import { getPortLabel, sanitizeBaudRate } from "./portUtils";
+import { groupSerialEventsBySession } from "./serialEventBatch";
 
 type DropSide = "before" | "after";
 
@@ -241,10 +242,11 @@ export default function App() {
   }, [updateSession]);
 
   const applySerialEvents = useCallback((events: SerialApiEvent[]) => {
+    const eventsBySession = groupSerialEventsBySession(events);
     setSessions((current) =>
       current.map((session) => {
-        const relevant = events.filter((event) => event.sessionId === session.id);
-        if (!relevant.length) return session;
+        const relevant = eventsBySession.get(session.id);
+        if (!relevant?.length) return session;
 
         let connected = session.connected;
         let simulated = session.simulated;
@@ -341,14 +343,6 @@ export default function App() {
       periodicTimersRef.current = {};
     };
   }, []);
-
-  useEffect(() => {
-    sessions.forEach((session) => {
-      if (!session.autoScroll) return;
-      const node = logViewportRefs.current[session.id];
-      if (node) node.scrollTop = node.scrollHeight;
-    });
-  }, [sessions]);
 
   const getVisibleLogs = (session: SessionState) => {
     const tokens = session.filterText.split(/[,\s]+/).map((item) => item.trim().toLowerCase()).filter(Boolean);

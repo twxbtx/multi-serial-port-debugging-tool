@@ -648,10 +648,26 @@
   gap: 0;
 }
 
-.log-virtual-spacer {
-  flex: none;
-  width: 1px;
-  pointer-events: none;
+.log-virtual-canvas {
+  position: relative;
+  min-width: 100%;
+}
+
+.log-virtual-window {
+  will-change: transform;
+}
+
+.log-follow-tail {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.pane-log.nowrap .log-virtual-canvas,
+.pane-log.nowrap .log-virtual-window,
+.pane-log.nowrap .log-follow-tail {
+  min-width: max-content;
 }
 
 .pane-log.compact {

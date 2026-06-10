@@ -126,7 +126,7 @@ export function trimLogEntries(entries: LogEntry[]) {
   return trimLogWindow(entries);
 }
 
-export function getDisplayMessage(session: SessionState, entry: LogEntry) {
+export function getDisplayMessage(session: Pick<SessionState, "showRawHex">, entry: LogEntry) {
   if (!session.showRawHex) return entry.message;
   return entry.rawHex ? entry.rawHex.toUpperCase() : textToHex(entry.message);
 }
